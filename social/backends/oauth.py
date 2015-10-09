@@ -237,6 +237,7 @@ class BaseOAuth1(OAuthAuth):
         # since the final URL will be of type bytes
         decoding = None if six.PY3 else 'utf-8'
         state = self.get_or_create_state()
+        '''
         response = self.request(
             self.REQUEST_TOKEN_URL,
             params=params,
@@ -244,6 +245,12 @@ class BaseOAuth1(OAuthAuth):
                         decoding=decoding),
             method=self.REQUEST_TOKEN_METHOD
         )
+        '''
+        #######
+        import requests
+        response = requests.post(url=self.REQUEST_TOKEN_URL, auth=OAuth1(key, secret, callback_uri=self.get_redirect_uri(state),
+                        decoding=decoding))
+        #######
         content = response.content
         if response.encoding or response.apparent_encoding:
             content = content.decode(response.encoding or
